@@ -21,6 +21,14 @@ Ce tutoriel fait partie d'une série dont le but est de créer un contrôleur mi
 
 ![ESP32_S3](images/ESP32_S3.jpg)
 
+## 📁 Structure du projet
+
+|F ichier ou adresse de dossier | Description                          |
+|-------------------------------|--------------------------------------|
+|/images                        | Images de ce fichier de turoriel     |
+|/src                           | Code principal                       |
+|README.md                      | Ce fichier de turoriel               |
+
 # 🎹 Qu'est ce qu'un contrôleur MIDI
 
 Un contrôleur MIDI peut servir à :
@@ -301,7 +309,6 @@ TinyUSB utilise les valeurs MIDI standard :
 
 
 ## 🎹 Notes MIDI principales (octave centrale et repères)
-
 
 | [Nom](ca://s?q=note_MIDI_nom) | [Nom FR](ca://s?q=note_MIDI_nom_FR) | [Valeur MIDI](ca://s?q=valeur_note_MIDI) | [Octave](ca://s?q=octave_MIDI) |
 |-------------------------------|--------------------------------------|-------------------------------------------|--------------------------------|
