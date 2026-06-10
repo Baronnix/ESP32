@@ -124,6 +124,26 @@ Les cartes ESP32‑S2/S3 sont :
  * bien documentées
  * supportées par Arduino et PlatformIO
 
+ ## 6. Utiliser une carte ESP32‑S3 avec USB natif
+
+C’est la vraie solution si tu veux faire un contrôleur MIDI USB.
+
+Modèles compatibles :
+ * ESP32‑S3 DevKitC‑1
+ * ESP32‑S3 N8R8
+ * LilyGO ESP32‑S3 Zero (version officielle)
+ * UnexpectedMaker TinyS3 / FeatherS3
+ * Waveshare ESP32‑S3
+ * ...
+
+Certaines cartes contiennent un convertisseur USB‑Série externe  
+➡️ Donc TinyUSB ne peut pas s’activer  
+➡️ Donc MIDI USB ne peut pas fonctionner  
+
+Modèles compatibles :
+ * ESP32‑S3 Zero
+  * ...
+
 # 🛠️ Environnement de développement et configuration de la carte
 
 ## 🧰 Choisir un environnement de développement (IDE)
@@ -132,7 +152,7 @@ Il existe plusieurs IDE, ci-dessous nous allons en comparer 2:
  * Arduino
  * PlatformIO
 
-Pour le turoriel nous utiliserons Arduino. 
+Pour le tutoriel nous utiliserons Arduino. 
 
 ### Arduino IDE (simple, débutants)
 
@@ -164,8 +184,10 @@ Suivre les étapes suivantes:
 1. Aller dans Fichier → Préférences
 2. Ajouter l’URL : [https://espressif.github.io/arduino-esp32/package_esp32_index.json](https://espressif.github.io/arduino-esp32/package_esp32_index.json)
 3. Choisir le type de carte:  Outils → Type de carte → ESP32S3 Dev Module
-4. Choisir le mode USB: Outils → USB Mode → TinyUSB
-5. Choisr l'USB firmware: Outils → USB Firmware → MIDI
+4. Choisir le mode USB: Outils → USB Mode → USB OTG (TinyUSB)
+5. Choisr l'USB firmware: Outils → USB CDC On Boot → Enabled
+
+![config_esp32_arduino](images/config_esp32_arduino.png)
 
 # 🔢 Programmation
 
@@ -223,13 +245,19 @@ void setup() {
 }
 
 void loop() {
-  uint8_t note = 60;  // Note C4
-  uint8_t velocity = 100;
+  uint8_t note = 60;      // C4
+  uint8_t velocity = 100; // Vélocité
 
-  usb_midi.sendNoteOn(note, velocity, 1);
+  // NOTE ON (canal 1 → 0x90)
+  uint8_t msgOn[3] = {0x90, note, velocity};
+  usb_midi.write(msgOn, 3);
+
   delay(500);
 
-  usb_midi.sendNoteOff(note, velocity, 1);
+  // NOTE OFF (canal 1 → 0x80)
+  uint8_t msgOff[3] = {0x80, note, velocity};
+  usb_midi.write(msgOff, 3);
+
   delay(1000);
 }
 ```
@@ -344,20 +372,61 @@ Octave	Note C (Do)	Valeur MIDI
 | [C8](ca://s?q=octave_C8)       | Do8                                    | 108                                       |
 | [C9](ca://s?q=octave_C9)       | Do9                                    | 120                                       |
 
+## 🎼 Tous les Status Bytes importants
 
+Voici le tableau complet des messages MIDI de base:
+
+| [Message](ca://s?q=message_MIDI) | [Code Hex](ca://s?q=code_hex_MIDI) | [Canal 1](ca://s?q=canal_MIDI_1) | [Canal 16](ca://s?q=canal_MIDI_16) | [Description](ca://s?q=description_message_MIDI) |
+|----------------------------------|-------------------------------------|-----------------------------------|------------------------------------|--------------------------------------------------|
+| [Note Off](ca://s?q=note_off_midi) | 8n | 0x80 | 0x8F | Relâche une note |
+| [Note On](ca://s?q=note_on_midi) | 9n | 0x90 | 0x9F | Joue une note |
+| [Poly Aftertouch](ca://s?q=poly_aftertouch_midi) | An | 0xA0 | 0xAF | Pression par note |
+| [Control Change](ca://s?q=control_change_midi) | Bn | 0xB0 | 0xBF | Contrôleurs (potentiomètres, sliders…) |
+| [Program Change](ca://s?q=program_change_midi) | Cn | 0xC0 | 0xCF | Change de programme / instrument |
+| [Channel Pressure](ca://s?q=channel_pressure_midi) | Dn | 0xD0 | 0xDF | Aftertouch global |
+| [Pitch Bend](ca://s?q=pitch_bend_midi) | En | 0xE0 | 0xEF | Bend ±8192 |
+
+## 🎛️  Structure d’un message MIDI
+
+Un message MIDI standard (Note On / Note Off) contient 3 octets :
+
+| [Octet](ca://s?q=octet_message_MIDI) | [Nom](ca://s?q=nom_octet_MIDI) | [Description](ca://s?q=description_octet_MIDI) | [Exemple](ca://s?q=exemple_message_MIDI) |
+|--------------------------------------|--------------------------------|------------------------------------------------|-------------------------------------------|
+| [1](ca://s?q=octet_1_MIDI) | Status Byte | Type de message + canal MIDI | 0x90 = Note On canal 1 |
+| [2](ca://s?q=octet_2_MIDI) | Data Byte 1 | Numéro de note (0–127) | 60 = C4 (Do central) |
+| [3](ca://s?q=octet_3_MIDI) | Data Byte 2 | Vélocité (0–127) | 100 = intensité |
+
+Explication rapide:
+ * Octet 1 : Status Byte  
+     * Définit le type de message MIDI (Note On, Note Off, CC…) et le canal.
+     * Exemple:
+         * 0x90 = Note On canal 1
+         * 0x80 = Note Off canal 1
+ * Octet 2 : Data Byte 1  
+     * Contient la note MIDI (0–127).
+     * Exemple : 60 = C4.
+ * Octet 3 : Data Byte 2  
+     * Contient la vélocité (0–127).
+    * Exemple : 100 = forte intensité.
 
 ## 🎛️ Comment TinyUSB utilise ces valeurs ?
 
 Dans TinyUSB, tu envoies une note ainsi :
 
 ```cpp
-usb_midi.sendNoteOn(60, 100, 1);  // C4
-usb_midi.sendNoteOff(60, 100, 1);
+  uint8_t msgOn[3] = {0x90, 60, 100};
+  usb_midi.write(msgOn, 3);
+  uint8_t msgOff[3] = {0x80, 60, 100};
+  usb_midi.write(msgOff, 3);
 ```
 
+Remarque: le 3 signifie dans la method write c'est le nombre d’octets (bytes) envoyé dans le message MIDI.
+
+Un message MIDI standard (Note On / Note Off) contient toujours 3 octets
+
 Les paramètres sont :
+ * Status Byte 
  * Numéro de note MIDI (0–127)
  * Vélocité (0–127)
- * Canal MIDI (1–16)
 
-Tu peux donc envoyer n’importe quelle note en utilisant le tableau ci‑dessus.
+Tu peux donc envoyer n’importe quelle note en utilisant les tableaux ci‑dessus.
