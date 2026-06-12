@@ -140,7 +140,7 @@ Certaines cartes contiennent un convertisseur USB‑Série externe
 ➡️ Donc TinyUSB ne peut pas s’activer  
 ➡️ Donc MIDI USB ne peut pas fonctionner  
 
-Modèles compatibles :
+Modèles non compatibles :
  * ESP32‑S3 Zero
   * ...
 
