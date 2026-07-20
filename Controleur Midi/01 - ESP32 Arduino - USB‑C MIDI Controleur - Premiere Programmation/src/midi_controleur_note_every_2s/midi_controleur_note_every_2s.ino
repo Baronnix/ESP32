@@ -5,6 +5,7 @@ USBMIDI MIDI;
 
 void setup() {
   USB.begin();              // Active TinyUSB
+
 }
 
 void loop() {

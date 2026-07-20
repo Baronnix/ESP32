@@ -108,6 +108,7 @@ Le port USB‑C permet :
 compatibilité plug‑and‑play
 
 ## 4. Puissance et polyvalence
+
 L’ESP32‑S3 offre :
  * un double cœur
  * du Bluetooth LE
@@ -130,10 +131,7 @@ C’est la vraie solution si tu veux faire un contrôleur MIDI USB.
 
 Modèles compatibles :
  * ESP32‑S3 DevKitC‑1
- * ESP32‑S3 N8R8
- * LilyGO ESP32‑S3 Zero (version officielle)
- * UnexpectedMaker TinyS3 / FeatherS3
- * Waveshare ESP32‑S3
+ * ESP32‑S3 N16R8
  * ...
 
 Certaines cartes contiennent un convertisseur USB‑Série externe  
@@ -148,11 +146,12 @@ Modèles non compatibles :
 
 ## 🧰 Choisir un environnement de développement (IDE)
 
-Il existe plusieurs IDE, ci-dessous nous allons en comparer 2:
+Il existe plusieurs IDE, ci-dessous nous allons en comparer 3:
  * Arduino
  * PlatformIO
+ * ESP-IDF
 
-Pour le tutoriel nous utiliserons Arduino. 
+Pour le tutoriel nous utiliserons Arduino IDE. 
 
 ### Arduino IDE (simple, débutants)
 
@@ -165,8 +164,18 @@ Pour le tutoriel nous utiliserons Arduino.
 ### PlatformIO (avancé, pro)
 
  * Intégré dans VS Code
+ * Platform multi environment flexible
  * Gestion propre des dépendances
  * Environnements multiples
+
+👉 Recommandé pour un projet MIDI plus complexe.
+
+### ESP‑IDF (avancé, pro)
+
+ * Intégré dans VS Code
+ * Framework bas niveau
+ * Gestion propre des dépendances
+ * Natif pur ESP
 
 👉 Recommandé pour un projet MIDI plus complexe.
 
@@ -183,9 +192,23 @@ Suivre les étapes suivantes:
 Suivre les étapes suivantes:
 1. Aller dans Fichier → Préférences
 2. Ajouter l’URL : [https://espressif.github.io/arduino-esp32/package_esp32_index.json](https://espressif.github.io/arduino-esp32/package_esp32_index.json)
-3. Choisir le type de carte:  Outils → Type de carte → ESP32S3 Dev Module
-4. Choisir le mode USB: Outils → USB Mode → USB OTG (TinyUSB)
-5. Choisr l'USB firmware: Outils → USB CDC On Boot → Enabled
+3. Aller dans Gestionnaire de cartes (menu sur la gauche)
+4. Rechercher esp32 par Espressif Systems
+5. Installer la dernière version (le tutoriel est réalisé avec la version 3.3.10, en cas de problème, utiliser cette version)
+
+## 🧩 Configuration du projet dans Arduino IDE
+
+1. Aller dans Fichier → Enregistrer sous...
+2. Choisir un dossier dont le chemin ne contient pas de caractères spéciaux
+3. Choisir un nom sans espaces ni caractères spéciaux
+4. Confirmer
+5. Un nouveau croquis est créé, vérifier que le fichier et le nom de dossier créés correspondent
+
+## 🧩 Configuration de la carte dans Arduino IDE
+
+1. Choisir le type de carte:  Outils → Type de carte → ESP32S3 Dev Module
+2. Choisir le mode USB: Outils → USB Mode → USB OTG (TinyUSB)
+3. Choisr l'USB firmware: Outils → USB CDC On Boot → Disabled
 
 ![config_esp32_arduino](images/config_esp32_arduino.png)
 
@@ -193,52 +216,24 @@ Suivre les étapes suivantes:
 
 ## 🎼 Quelle librairie installer ?
 
-Pour que l’ESP32 puisse se comporter comme un périphérique MIDI USB, il faut utiliser la librairie :
- * Adafruit TinyUSB Library
+Pour que l’ESP32 puisse se comporter comme un périphérique MIDI USB, il faut utiliser les librairies mises à disposition par Espressif pour l'ESP32.
 
-C’est elle qui permet :
+Elles sont installées automatiquement grace à l'ajout de esp32 dans le gestionnaire de carte.
+
+Elles permettent :
  * la gestion du port USB natif
  * la création d’un périphérique MIDI
  * l’envoi de messages MIDI (Note On, Note Off, CC…)
 
-👉 Elle est indispensable pour ce projet.
-
-## 📥 Comment installer la librairie (Arduino IDE)
-
- * Méthode 1 — Installation automatique (recommandée)
-    1. Ouvrir Arduino IDE
-    2. Aller dans Outils → Gérer les bibliothèques…
-    3. Chercher : Adafruit TinyUSB Library
-    4. Cliquer sur Installer
-
-C’est tout — Arduino IDE gère les dépendances automatiquement.
-
-* Méthode 2 — Installation manuelle (si besoin)
-    1. Aller sur le GitHub officiel de Adafruit TinyUSB: [https://github.com/Adafruit/adafruit_tinyusb_arduino](https://github.com/Adafruit/adafruit_tinyusb_arduino)
-    2. Télécharger le ZIP
-    3. Arduino IDE → Croquis → Inclure une bibliothèque → Ajouter la bibliothèque .ZIP
-    4. Sélectionner le fichier ZIP
-
-## 🧪 Vérifier que la librairie fonctionne
-
-Dans ton code, tu dois pouvoir inclure :
-
-```cpp
-#include "Adafruit_TinyUSB.h"
-```
-
-Si aucune erreur n’apparaît → la librairie est bien installée.
-
+👉 Elles sont indispensable pour ce projet.
 
 ## 🎹 Exemple de code : envoyer une note MIDI
 
-TEsts faits et fonctionnant le 29 juin 2026
-Le code suivant envoi la note C4 toutes les 2 secondes environ
+Le code suivant envoi la note C4 toutes les secondes environ
 
-Adafruit_TinyUSB_Arduino: 3.7.7
-ESP32-BLE-MIDI 0.3.2
-arduino_midi_library 5.0.2
-NimBLE-Arduino 2.5.0
+Dependances:
+ * Cartes:
+    * esp32 par Espressif Systems - 3.3.10
 
 ```cpp
 #include "USB.h"
@@ -263,14 +258,9 @@ void loop() {
 
 ## 🧪 Compilation
 
-Dans Arduino IDE :
 1. Sélectionner la carte ESP32‑S2/S3
 2. Sélectionner le port USB‑C
 3. Cliquer sur Vérifier pour compiler
-
-Dans PlatformIO :
-1. Ouvrir le projet
-2. Cliquer sur Build
 
 ## ⚡ Flashage de l’ESP32
 
@@ -411,207 +401,13 @@ Explication rapide:
 Dans TinyUSB, tu envoies une note ainsi :
 
 ```cpp
-  uint8_t msgOn[3] = {0x90, 60, 100};
-  usb_midi.write(msgOn, 3);
-  uint8_t msgOff[3] = {0x80, 60, 100};
-  usb_midi.write(msgOff, 3);
+  MIDI.noteOn(60, 100, 1)
+  MIDI.noteOff(60, 0, 1);
 ```
 
-Remarque: le 3 signifie dans la method write c'est le nombre d’octets (bytes) envoyé dans le message MIDI.
-
-Un message MIDI standard (Note On / Note Off) contient toujours 3 octets
-
-Les paramètres sont :
- * Status Byte 
- * Numéro de note MIDI (0–127)
- * Vélocité (0–127)
+* noteOn et noteOff sont les méthodes de l'objet MIDI à appeler suivant le type de message MIDI
+* la première variable contient la note (60)
+* la seconde variable contient l'intensité de la note (entre 0 et 127)
+* la dernière variable contient le canal (1)
 
 Tu peux donc envoyer n’importe quelle note en utilisant les tableaux ci‑dessus.
-
-
-
-
-
-
-
-
-Aujourd’hui
-dans arduino, peut on creer un controleur naif base sur esp32s3
-Oui — absolument, tu peux créer un contrôleur “naïf” (simple, minimaliste) basé sur un ESP32‑S3 dans l’environnement Arduino.
-Et même mieux : l’ESP32‑S3 est officiellement supporté par Arduino via le core Espressif, ce qui permet de programmer la puce comme un Arduino classique (setup/loop, digitalWrite, etc.). 
-
-🧩 Réponse courte
-Oui, c’est possible.
-Il suffit d’installer le support ESP32 dans l’IDE Arduino, sélectionner ton modèle ESP32‑S3, puis coder ton contrôleur comme n’importe quel sketch Arduino.
-
-🧠 Ce que signifie “contrôleur naïf” sur ESP32‑S3
-Un contrôleur naïf = un contrôleur très simple, sans optimisation ni architecture complexe.
-Sur ESP32‑S3, cela peut être :
-
-lire quelques GPIO
-
-piloter des relais / moteurs
-
-envoyer des messages via UART / I2C / SPI
-
-faire du Wi‑Fi ou du Bluetooth sans gestion avancée
-
-exécuter une boucle loop() simple
-
-L’ESP32‑S3 est largement capable de ça — même si c’est une puce très puissante (USB natif, instructions IA, PSRAM, Wi‑Fi/BLE).
-
-⚙️ Comment programmer un ESP32‑S3 dans Arduino IDE
-1. Installer Arduino IDE 2.x
-(Indispens
-
-dans arduino, peut on creer un controleur natif base sur esp32s3
-Oui — tu peux créer un contrôleur natif basé sur un ESP32‑S3 dans l’environnement Arduino, et c’est même l’un des usages les plus courants de cette puce.
-
-La confusion vient souvent du mot natif.
-Dans le monde ESP32, natif peut vouloir dire deux choses :
-
-Programmer l’ESP32‑S3 directement via le core Arduino (setup/loop, digitalWrite, etc.)
-
-Programmer l’ESP32‑S3 en “natif” via l’ESP-IDF, sans Arduino
-
-👉 La bonne nouvelle : les deux sont possibles.  
-Et si tu veux un contrôleur simple, minimaliste, Arduino est parfait.
-
-🚀 ESP32‑S3 + Arduino : oui, c’est supporté
-L’ESP32‑S3 est officiellement compatible avec l’IDE Arduino via le core Espressif.
-
-Tu peux donc :
-
-écrire un sketch classique (setup() / loop())
-
-dans arduino, peut on creer un controleur natif base sur esp32s3 reconnu comme controleur mdi dans peripherique audio video et media
-Oui — techniquement c’est possible, mais pas directement via Arduino : pour qu’un ESP32‑S3 soit reconnu comme “contrôleur MDI” (ou plus précisément périphérique USB Audio/MIDI dans Périphériques audio, vidéo et jeu sous Windows), il faut utiliser l’USB natif du S3 et implémenter un device USB MIDI class‑compliant.
-
-Et c’est là que la nuance est importante :
-
-🎯 Conclusion rapide
-Oui, un ESP32‑S3 peut devenir un contrôleur USB MIDI natif reconnu automatiquement par Windows/macOS/Linux.
-
-Non, Arduino ne fournit pas nativement la pile USB nécessaire.
-
-Oui, tu peux le faire depuis Arduino grâce à la TinyUSB intégrée au core ESP32‑S3.
-
-👉 Donc : c’est faisable, mais pas “plug‑and‑play”.
-
-🧩 Pourquoi l’ESP32‑S3 peut faire du MIDI USB natif
-L’ESP32‑S3 possède :
-
-un contrôleur USB OTG natif
-
-support officiel de TinyUSB dans le core Arduino ESP32
-
-possibilité de créer des devices USB : HID, CDC, MIDI, Audio, etc.
-
-Ce qui permet de le faire reconnaître comme :
-
-USB MIDI Device
-
-USB HID Gamepad
-
-USB Audio Device (plus complexe)
-
-🎹 Créer un contrôleur MIDI USB avec ESP32‑S3 (Arduino)
-Voici un exemple minimaliste basé sur TinyUSB (fourni dans le core ESP32‑S3 Arduino) :
-
-cpp
-#include "USB.h"
-#include "USBMIDI.h"
-
-USBMIDI midi;
-
-void setup() {
-  USB.begin();
-}
-
-void loop() {
-  midi.sendNoteOn(60, 127, 1);  // Note ON
-  delay(500);
-  midi.sendNoteOff(60, 0, 1);  // Note OFF
-  delay(500);
-}
-➡️ Une fois flashé, Windows affichera :
-Périphérique audio, vidéo et jeu → USB MIDI Device
-
-
-Installer le support ESP32-S3 dans Arduino
-Arduino doit connaître les cartes ESP32 pour compiler le firmware USB MIDI.
-
-Arduino IDE → Préférences → Additional Boards Manager URLs
-
-Ajoute l’URL : https://espressif.github.io/arduino-esp32/package_esp32_index.json
-
-Ouvre Tools → Board → Boards Manager
-
-Installe esp32 by Espressif Systems
-
-Sélectionne ESP32S3 Dev Module
-
-02
-Activer TinyUSB (mode USB-OTG)
-Indispensable
-Le MIDI USB nécessite la pile USB native TinyUSB.
-
-Tools → USB Mode
-
-Choisis USB-OTG (TinyUSB)
-
-Désactive USB CDC On Boot si présent
-
-Vérifie que ton câble USB est connecté au port USB natif (pas UART)
-
-03
-Inclure les bibliothèques USB MIDI
-Le core Arduino ESP32 fournit USBMIDI via TinyUSB.
-
-Ajoute en haut du sketch :
-
-cpp
-#include "USB.h"
-#include "USBMIDI.h"
-Déclare ton device :
-
-cpp
-USBMIDI MIDI;
-04
-Initialiser l’USB et envoyer une note MIDI
-Une fois USB initialisé, l’ESP32-S3 apparaît comme périphérique MIDI class‑compliant.
-
-Exemple minimal :
-
-cpp
-void setup() {
-  USB.begin();
-}
-void loop() {
-  MIDI.sendNoteOn(60, 127, 1);
-  delay(500);
-  MIDI.sendNoteOff(60, 0, 1);
-  delay(500);
-}
-Compile et téléverse sur l’ESP32‑S3
-
-05
-Tester la reconnaissance MIDI sur l’ordinateur
-Le périphérique doit apparaître comme USB MIDI Device.
-
-Sous Windows : vérifie dans Périphériques audio, vidéo et jeu
-
-Sous macOS : ouvre Audio MIDI Setup
-
-Utilise un moniteur MIDI (MIDI‑OX, SimpleSynth, etc.) pour voir les notes
-
-06
-Ajouter des boutons, capteurs ou sliders
-Personnalisation
-Tu peux envoyer des messages MIDI selon tes entrées physiques.
-
-Lis tes GPIO (boutons, potentiomètres, capteurs)
-
-Envoie des messages : sendControlChange(), sendNoteOn(), sendPitchBend()
-
-L’ESP32‑S3 gère aussi le MIDI 2.0 via la lib tusb_ump si tu veux aller plus loin
