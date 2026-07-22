@@ -71,7 +71,7 @@ Les ESP32‑S2/S3 ont un seul port USB physique, mais TinyUSB peut créer plusie
 * etc.
 Il est donc en théorie possible d'utiliser l'ESP32-S3 en tant que périphérique MIDI et récupérer les informations de debug par port Série.
 
-Cependant l'ESP32‑S3 Dev Module ne peut pas exposer facilement CDC + MIDI en même temps dans la version esp32 core que l'on utilise (3.3.10) sous Arfuino IDE 2.3.
+Cependant l'ESP32‑S3 Dev Module ne peut pas exposer facilement CDC + MIDI en même temps dans la version esp32 core que l'on utilise (3.3.10) sous Arduino IDE 2.3.
 
 Ainsi, on utilisera les 2 ports (par alternance) de l'ESP32-S3 Dev Module suivant ce que l'on souhaite faire:
 * USB-CDC: Pour afficher les informations de debug
@@ -140,7 +140,15 @@ Cette section explique en détail comment fonctionne la partie réseau du projet
 * extraction des paramètres GET,
 * appel de la fonction qui joue une note MIDI.
 
-## 🔌 1. Connexion au WiFi
+## 🔌 1. Inclure les bibliothèques
+
+```cpp
+#include <WiFi.h>
+#include <WebServer.h>
+```
+Ces bibliothèques sont fournie avec l’ESP32 Arduino Core.
+
+## 🔌 2. Connexion au WiFi
 
 La connexion au réseau WiFi se fait avec les fonctions classiques de l’ESP32 :
 ```cpp
@@ -162,7 +170,7 @@ Serial.println(WiFi.localIP());
 ```
 Cette IP est utile pour accéder au serveur web.
 
-## 🌐 2. Création du serveur Web
+## 🌐 3. Création du serveur Web
 
 Le serveur web est créé avec la classe WebServer :
 ```cpp
@@ -179,7 +187,7 @@ Pour démarrer le serveur :
 server.begin();
 ```
 
-### 🧩 3. Définition de l’API /playNote
+### 🧩 4. Définition de l’API /playNote
 
 L’API est définie avec :
 ```cpp
@@ -190,7 +198,7 @@ Cela signifie :
 * Quand quelqu’un appelle l’URL /playNote,
 * La fonction handlePlayNote() est exécutée.
 
-## 🧪 4. Lecture des paramètres GET
+## 🧪 5. Lecture des paramètres GET
 
 L’API accepte deux paramètres :
 * note → numéro de note MIDI (0–127)
@@ -213,7 +221,7 @@ Si un paramètre manque, on renvoie une erreur HTTP 400 :
 server.send(400, "text/plain", "Missing note or channel");
 ```
 
-## 🎵 5. Appel de la méthode qui joue la note MIDI
+## 🎵 6. Appel de la méthode qui joue la note MIDI
 Une
  fois les paramètres récupérés, on appelle TinyUSB MIDI :
 ```cpp
@@ -233,7 +241,7 @@ Le serveur renvoie ensuite une réponse HTTP :
 server.send(200, "text/plain", "Note played");
 ```
 
-## 🌐 6. API REST : /playNote
+## 🌐 7. API REST : /playNote
 
 Ouvre un browser et entre le nom de domain ou l'ip, suivi de la ressource puis des paramètres.
 Exemple : [http://midiserver.local/playNote?note=60&channel=1](http://midiserver.local/playNote?note=60&channel=1)
