@@ -52,7 +52,7 @@ TinyUSB fonctionne uniquement sur :
 
 ## 3.1 Créer un projet propre
 
-1. ans VS Code : Ctrl + Shift + P → ESP-IDF: New Project
+1. Dans VS Code : Ctrl + Shift + P → ESP-IDF: New Project
 2. Choisir l’exemple : usb/device/tusb_midi
 3. Choisir un dossier propre, sans espaces ni accents : C:\esp\usb_midi_controller
 
