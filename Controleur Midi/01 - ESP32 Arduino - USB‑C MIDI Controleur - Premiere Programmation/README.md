@@ -4,7 +4,7 @@ Ce guide explique comment comment programmer un ESP32 connecté en USB‑C afin 
 
 # 📺 Vidéo
 
-Lien Youtube: [https://www.youtube.com/@Baronnix/playlists](https://www.youtube.com/@Baronnix/playlists)
+Lien Youtube: [https://www.youtube.com/watch?v=1if2j6FiMQ4](https://www.youtube.com/watch?v=1if2j6FiMQ4)
 
 # 🧩 Objectif
 
