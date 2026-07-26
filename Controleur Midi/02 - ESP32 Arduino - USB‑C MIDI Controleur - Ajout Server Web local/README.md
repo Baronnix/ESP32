@@ -10,6 +10,10 @@ Ce tutoriel transforme un ESP32‑S2 ou ESP32‑S3 en :
 Tu pourras envoyer une note MIDI via :
 [http://midiserver.local/playNote?note=60&channel=1](http://midiserver.local/playNote?note=60&channel=1)
 
+# 📺 Vidéo
+
+Lien Youtube: [https://www.youtube.com/watch?v=u2ZS3cqmaGg](https://www.youtube.com/watch?v=u2ZS3cqmaGg)
+
 # 📦 Prérequis
 
 * Carte ESP32‑S2 / ESP32‑S3 compatible TinyUSB (Dans ce tutoriel on utilise la carte ESP32‑S3 DevKit C1)
