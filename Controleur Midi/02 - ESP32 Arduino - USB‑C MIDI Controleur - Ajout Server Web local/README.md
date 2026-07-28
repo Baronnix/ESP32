@@ -24,6 +24,8 @@ Lien Youtube: [https://www.youtube.com/watch?v=u2ZS3cqmaGg](https://www.youtube.
 
 Ce tutoriel repart du code final du tutoriel [01 - ESP32 Arduino - USB‑C MIDI Controleur - Premiere Programmation](https://github.com/Baronnix/ESP32/tree/main/Controleur%20Midi/01%20-%20ESP32%20Arduino%20-%20USB%E2%80%91C%20MIDI%20Controleur%20-%20Premiere%20Programmation)
 
+Lien Youtube tutoriel précédent: [https://www.youtube.com/watch?v=1if2j6FiMQ4](https://www.youtube.com/watch?v=1if2j6FiMQ4)
+
 # 🧩 Fonctionnalités du projet
 
 * USB MIDI activé via TinyUSB
