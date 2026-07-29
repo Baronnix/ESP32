@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>ESP32 MIDI Controller</title>
+  <style>
+    body { font-family: Arial; background:#f0f0f0; padding:20px; }
+    h1 { text-align:center; }
+    .note-btn {
+      padding:15px 25px;
+      margin:10px;
+      font-size:20px;
+      background:#4CAF50;
+      color:white;
+      border:none;
+      border-radius:8px;
+      cursor:pointer;
+    }
+    .note-btn:hover {
+      background:#45a049;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎹 ESP32 MIDI Web Controller</h1>
+
+  <div id="buttons"></div>
+
+  <script>
+	//const base_url = "http://midiserver.local"; // Valeur pour une page web stockée sur l'ordinateur. L'adresse du controleur sur le reseau est nécessaire.
+	const base_url = ""; // Valeur pour une page web stockée sur LittleFS. L'adressedu controleur est connue puisque la page est ouverte depuis ce dernier.
+    
+	const notes = [
+      {name:"C4", value:60},
+      {name:"D4", value:62},
+      {name:"E4", value:64},
+      {name:"F4", value:65},
+      {name:"G4", value:67},
+      {name:"A4", value:69},
+      {name:"B4", value:71},
+      {name:"C5", value:72}
+    ];
+
+    const channel = 1;
+
+    const container = document.getElementById("buttons");
+
+    notes.forEach(n => {
+      const btn = document.createElement("button");
+      btn.className = "note-btn";
+      btn.innerText = n.name;
+      btn.onclick = () => {
+        fetch(`${base_url}/playNote?note=${n.value}&channel=${channel}`)
+          .then(r => r.text())
+          .then(t => console.log(t));
+      };
+      container.appendChild(btn);
+    });
+  </script>
+</body>
+</html>

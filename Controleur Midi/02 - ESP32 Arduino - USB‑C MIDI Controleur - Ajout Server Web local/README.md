@@ -305,6 +305,10 @@ Si tu vois une réponse → mDNS fonctionne.
 
 # 🛠️ Code final complet
 
+Dependances:
+ * Cartes:
+    * esp32 par Espressif Systems - 3.3.10
+
 ```cpp
 #include "USB.h"
 #include "USBMIDI.h"
