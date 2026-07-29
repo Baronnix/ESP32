@@ -339,9 +339,11 @@ void loop() {
 Recherche la version de ton ESP32S3, par exemple si ton module est un ESP32-S3-N16R8, le nom se lit comme ceci :
 * N16 → 16 MB de flash NOR
 * R8 → 8 MB de PSRAM
+
 Donc ton module possède :
 * Flash : 16 MB (128 Mbit)
 * PSRAM : 8 MB
+
 Ce que ça implique pour Arduino IDE:
 * Dans Outils → Flash Size, tu devrais choisir l'option 16MB
 
@@ -404,7 +406,7 @@ Exemples de fichiers :
 1. Fermer le monitor série dans Arduino
 2. Branche l'ESP32S3 devkit sur le port USB-TTL
 3. Redémarre l'ESP32S3 devkit en mode flashage (bouton BOOT maintenu appuyé + et appui court sur bouton RESET)
-4. Choisit lebon port COM (série)
+4. Choisit le bon port COM (série)
 5. Appuie sur Ctrl + Shift + P (Windows)
 6. Tape/cherche : Upload LittleFS to Pico/ESP8266/ESP32
 7. Clique sur : Upload LittleFS to Pico/ESP8266/ESP32
