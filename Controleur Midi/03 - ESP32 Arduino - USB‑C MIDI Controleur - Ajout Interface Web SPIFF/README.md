@@ -9,7 +9,7 @@ Ce tutoriel ajoute une interface Web à ton projet ESP32‑S3 Arduino IDE 2.3, a
 
 # 📺 Vidéo
 
-Lien Youtube: [https://www.youtube.com/@Baronnix/playlists](https://www.youtube.com/@Baronnix/playlists)
+Lien Youtube: [https://www.youtube.com/watch?v=PnMmg08P6Bs](https://www.youtube.com/watch?v=PnMmg08P6Bs)
 
 # 📦 Prérequis
 
