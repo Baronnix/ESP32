@@ -132,7 +132,7 @@ Le fichier index.html sera envoyé dans LittleFS via l’outil ESP32 Sketch Data
 Il faut ajouter l'extension VS Code Arduino “arduino-littlefs-upload”, Arduino IDE 2.3 ne l’installe pas automatiquement.
 
 1. Va sur la page des releases et clique sur le fichier .vsix pour le télécharger: https://github.com/earlephilhower/arduino-littlefs-upload/releases
-2. Sur ton ordinateur, va dans le dossier suivant : C:\Users\<nom_utilisateur>\.arduinoIDE\
+2. Sur ton ordinateur, va dans le dossier suivant : C:\Users\\<nom_utilisateur>\\.arduinoIDE\
 3. Crée un nouveau dossier appelé plugins si ce n’est pas déjà fait.
 4. Déplace le fichier .vsix que tu as téléchargé dans le dossier plugins (supprime toute ancienne version du même plugin si nécessaire).
 5. Redémarre ou ouvre Arduino IDE 2.
