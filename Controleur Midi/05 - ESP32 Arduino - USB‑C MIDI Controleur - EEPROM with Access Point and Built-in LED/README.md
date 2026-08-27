@@ -64,6 +64,7 @@ Le projet de départ contient :
 * Une API /playNote
 * Un fichier index.html servi via LittleFS
 * Une connexion WiFi fixe, codée en dur
+
 Cette base fonctionne, mais ne permet pas :
 * De changer le WiFi sans recompiler
 * De gérer les erreurs de connexion
@@ -216,6 +217,12 @@ Le mode AP garantit que l’utilisateur peut toujours :
 
 ### 4.1 — Lire les identifiants au boot
 
+Définir les variables global
+```cpp
+String wifiSSID = "";
+String wifiPASS = "";
+```
+
 Dans setup() :
 ```cpp
 wifiSSID = readEEPROM(SSID_ADDR, 100);
@@ -329,7 +336,7 @@ Adafruit_NeoPixel rgbLED(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 ```cpp
 rgbLED.begin();
 rgbLED.setBrightness(50);  // luminosité (0–255)
-rgbLED.show();             // éteint la LED
+ledOff();             // éteint la LED
 ```
 ### 5.3. Fonctions utilitaires pour changer la couleur
 
