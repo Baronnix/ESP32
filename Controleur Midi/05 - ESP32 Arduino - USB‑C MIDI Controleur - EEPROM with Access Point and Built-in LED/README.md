@@ -11,7 +11,7 @@ Ce guide est conçu pour être suivi progressivement, en partant du code initial
 
 # 📺 Vidéo
 
-Lien Youtube: [https://www.youtube.com/watch?v=PnMmg08P6Bs](https://www.youtube.com/watch?v=PnMmg08P6Bs)
+Lien Youtube: [https://www.youtube.com/@Baronnix/playlists](https://www.youtube.com/@Baronnix/playlists)
 
 # 📦 Prérequis
 
