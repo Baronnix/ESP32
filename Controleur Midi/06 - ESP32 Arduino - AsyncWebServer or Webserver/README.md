@@ -18,6 +18,8 @@ Lien Youtube: [https://www.youtube.com/@Baronnix/playlists](https://www.youtube.
 * Arduino IDE installé
 * esp32 installé dans le gestionnaire de cartes (esp32 par Espressif Systems - 3.3.10)
 
+Ce tutoriel repart du code final du tutoriel [05 - ESP32 Arduino - USB‑C MIDI Controleur - EEPROM with Access Point and Built-in LED](https://github.com/Baronnix/ESP32/tree/main/Controleur%20Midi/05%20-%20ESP32%20Arduino%20-%20USB%E2%80%91C%20MIDI%20Controleur%20-%20EEPROM%20with%20Access%20Point%20and%20Built-in%20LED)
+
 # ⚖️ Comparaison WebServer vs AsyncWebServer
 
 ## 🟥 WebServer — modèle synchrone (bloquant)
