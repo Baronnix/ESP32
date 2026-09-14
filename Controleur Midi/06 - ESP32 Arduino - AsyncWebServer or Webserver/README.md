@@ -2,7 +2,7 @@
 
 Ce tutoriel explique étape par étape comment convertir un projet ESP32‑S3 utilisant WebServer vers une architecture moderne et non‑bloquante basée sur AsyncWebServer.
 
-Tu y apprendras comment adapter les routes API (/playNote, /setWifi), servir des fichiers depuis LittleFS, gérer le WiFi et l’Access Point, conserver les identifiants dans l’EEPROM, activer mDNS, et maintenir la stabilité du système tout en utilisant USB MIDI.
+Tu y apprendras comment adapter les routes API (/playNote, /setWifi), servir des fichiers depuis LittleFS, gérer le WiFi et l’Access ESPAsyncWebServer ESP32AsyncPoint, conserver les identifiants dans l’EEPROM, activer mDNS, et maintenir la stabilité du système tout en utilisant USB MIDI.
 
 Le guide inclut un code final complet, prêt à compiler, pour obtenir un serveur web asynchrone performant, compatible avec les projets temps‑réel comme les contrôleurs MIDI.
 
@@ -19,6 +19,18 @@ Lien Youtube: [https://www.youtube.com/@Baronnix/playlists](https://www.youtube.
 * esp32 installé dans le gestionnaire de cartes (esp32 par Espressif Systems - 3.3.10)
 
 Ce tutoriel repart du code final du tutoriel [05 - ESP32 Arduino - USB‑C MIDI Controleur - EEPROM with Access Point and Built-in LED](https://github.com/Baronnix/ESP32/tree/main/Controleur%20Midi/05%20-%20ESP32%20Arduino%20-%20USB%E2%80%91C%20MIDI%20Controleur%20-%20EEPROM%20with%20Access%20Point%20and%20Built-in%20LED)
+
+# Dependances et Versions
+
+* Arduino IDE - 2.3.10
+* Arduino Plugins:
+  * arduino-littlefs-upload - 1.6.3
+* Cartes:
+  * esp32 par Espressif Systems - 3.3.11
+* Librairies
+  * Adafruit NeoPixel - 1.15.5
+  * Async TCP par ESP32Async - 3.5.0
+  * ESPAsyncWebServer par ESP32Async - 3.12.1
 
 # ⚖️ Comparaison WebServer vs AsyncWebServer
 
@@ -92,6 +104,10 @@ Passer de :
 * Meilleure stabilité pour USB MIDI + WiFi + Web UI
 
 # 🧩 Étape 1 — Ajouter les bonnes librairies
+
+Dans Arduino IDE installer les librairies:
+* Async TCP par ESP32Async - 3.5.0
+* ESPAsyncWebServer par ESP32Async - 3.12.1
 
 Remplacer :
 ```cpp
