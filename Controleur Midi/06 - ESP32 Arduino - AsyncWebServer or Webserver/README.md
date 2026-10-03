@@ -8,7 +8,7 @@ Le guide inclut un code final complet, prêt à compiler, pour obtenir un serveu
 
 # 📺 Vidéo
 
-Lien Youtube: [https://www.youtube.com/@Baronnix/playlists](https://www.youtube.com/@Baronnix/playlists)
+Lien Youtube: [https://www.youtube.com/watch?v=RzZWUnJmFhw](https://www.youtube.com/watch?v=RzZWUnJmFhw)
 
 # 📦 Prérequis
 
