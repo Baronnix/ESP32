@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<script src="/js/bootstrap.bundle.min.js"></script>
+<script src="/js/functions.js"></script>
+<title>Controleur Midi</title>
+<div id="menu"></div>
+<div w3-include-html="/html/menu.html"></div> 
+</head>
+  
+<body>
+<br>
+<div class="container-fluid" style='text-align:center;max-width:800px'>
+<div style='text-align:center;width:800px'>
+	<h4><span class="badge bg-dark">Notes</span></h4>
+	<div id="notesDiv">
+	</div>
+	<br><br>
+	<button id="rebootButton" type='button' class='btn btn-primary' onclick='reboot()' data-toggle='tooltip' data-placement='top' title='Redemarrer'>Redemarrer</button>
+	<br><br>
+</div><br>
+<div style='text-align:center;width:800px'>
+<div class="alert alert-info" id="infoMsg" hidden role="alert"></div>
+<div class="alert alert-success" id="successMsg" hidden role="alert"></div>
+<div class="alert alert-warning" id="warningMsg" hidden role="alert"></div>
+<div class="alert alert-danger" id="errorMsg" hidden role="alert"></div>
+</div></div>
+<script>
+includeHTML();
+buildNotesButtons();
+</script>
+
+</body>
+</html>
