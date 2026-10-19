@@ -188,6 +188,7 @@ function saveGrid() {
 
 function openEditConfigModal() {
 	saveGrid();
+	document.getElementById('alertEditConfigModal').hidden = true;
 	document.getElementById('configTextArea').value = JSON.stringify(items);
 }
 
@@ -207,18 +208,28 @@ function openEditWidgetModal(item) {
 }
 
 function saveConfigGridstack(input) {
-	if (isJsonString(input)) {
-		var myModalEl = document.querySelector('#editConfigModal');
-		var modal = bootstrap.Modal.getOrCreateInstance(myModalEl);
-		modal.hide();
-		items = JSON.parse(input);
-		loadPage();
-		saveGrid();
+	var configItems;
+	try {
+		configItems = JSON.parse(input);
 	}
-	else {
-		document.getElementById('alertEditConfigModal').innerHTML = "Invalide configuration";
-		document.getElementById('alertEditConfigModal').hidden = false;
+	catch (error) {
+		showConfigError();
+		return;
 	}
+
+	items = configItems;
+	loadPage();
+	saveGrid();
+
+	var myModalEl = document.querySelector('#editConfigModal');
+	var modal = bootstrap.Modal.getOrCreateInstance(myModalEl);
+	modal.hide();
+	document.getElementById('alertEditConfigModal').hidden = true;
+}
+
+function showConfigError() {
+	document.getElementById('alertEditConfigModal').innerHTML = "Invalide configuration";
+	document.getElementById('alertEditConfigModal').hidden = false;
 }
 
 function applyWidgetConfig() {
