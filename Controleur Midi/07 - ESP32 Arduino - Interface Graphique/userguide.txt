@@ -1,0 +1,104 @@
+NOTICE D'UTILISATION
+Contrôleur MIDI USB avec ESP32-S3
+=================================
+
+1. Connexion au contrôleur
+--------------------------
+
+Branchez l'ESP32-S3 à l'ordinateur avec le port USB-OTG. Le contrôleur est vu
+comme un appareil MIDI USB ; il ne produit pas de son à lui seul. Pour entendre
+les notes, utilisez un logiciel ou un instrument virtuel capable de recevoir le
+MIDI USB.
+
+L'interface de configuration se commande depuis un navigateur. Elle est
+accessible à l'adresse :
+
+    http://midiserver.local/
+
+L'ordinateur ou le téléphone doit être connecté au même réseau Wi-Fi que le
+contrôleur. Selon le système utilisé, la résolution de l'adresse
+midiserver.local peut ne pas être prise en charge.
+
+2. Première connexion ou connexion au point d'accès
+---------------------------------------------------
+
+Au premier démarrage, ou si aucun réseau Wi-Fi valide n'est enregistré,
+l'ESP32 crée un point d'accès Wi-Fi. Son nom commence par
+"Midi_Controller_AP_" (par exemple Midi_Controller_AP_1). Le mot de passe du
+point d'accès configuré dans le programme est :
+
+    CROQUETTE
+
+Connectez votre ordinateur ou téléphone à ce point d'accès, puis ouvrez
+http://midiserver.local/ dans un navigateur. Si cette adresse n'est pas
+résolue en mode point d'accès, essayez http://192.168.4.1/.
+
+3. Configurer le Wi-Fi
+---------------------
+
+1. Dans le menu, ouvrez « Wifi ».
+2. Attendez que la liste des réseaux disponibles s'affiche.
+3. Sélectionnez le réseau Wi-Fi à utiliser.
+4. Saisissez son mot de passe, puis cliquez sur « Enregistrer Wifi ».
+5. Revenez à l'accueil et cliquez sur « Redemarrer ».
+6. Après le redémarrage, reconnectez votre ordinateur ou téléphone au même
+   réseau Wi-Fi que le contrôleur, puis ouvrez http://midiserver.local/.
+
+L'enregistrement des identifiants ne connecte pas immédiatement le contrôleur :
+un redémarrage est nécessaire. Si le réseau enregistré est inaccessible au
+démarrage, le contrôleur passe en mode point d'accès.
+
+Pour effacer les identifiants Wi-Fi, ouvrez « Wifi », cliquez sur « Oublier
+Wifi », puis redémarrez le contrôleur. Il créera alors son point d'accès de
+configuration.
+
+4. Jouer des notes
+------------------
+
+La page d'accueil présente les notes MIDI disponibles. Cliquez sur une note
+pour l'envoyer sur le canal MIDI 1.
+
+La page « Dashboard » propose des tuiles configurables. En mode jeu, cliquez sur
+une tuile pour envoyer la note et le canal associés. La note est transmise en
+MIDI USB à l'ordinateur ; le son dépend du logiciel ou de l'instrument virtuel
+utilisé sur celui-ci.
+
+5. Personnaliser le Dashboard
+----------------------------
+
+Cliquez sur « Editer » pour passer en mode modification. Dans ce mode, vous
+pouvez :
+
+- déplacer les tuiles par glisser-déposer ;
+- modifier leur taille en faisant glisser leur coin inférieur droit ;
+- cliquer sur l'icône crayon d'une tuile pour modifier son texte, son canal MIDI
+  (1 à 8), sa note et sa couleur ;
+- cliquer sur l'icône de suppression pour retirer une tuile ;
+- cliquer sur « Ajouter Tuile » pour en créer une, puis configurer ses propriétés.
+
+Cliquez sur « Enregistrer » pour sauvegarder les modifications, puis sur
+« Jouer » pour quitter le mode modification. Les tuiles sont enregistrées dans
+le stockage local du navigateur (localStorage), sur l'appareil utilisé. Cette
+configuration n'est pas stockée dans l'ESP32 et n'est donc pas automatiquement
+partagée avec un autre navigateur ou appareil.
+
+Le bouton « Editer Configuration » affiche le JSON de la grille. Dans cette
+version, utilisez les commandes visuelles d'édition des tuiles pour modifier
+le Dashboard ; l'édition ou l'importation depuis cette fenêtre n'est pas prise
+en charge de manière fiable.
+
+6. Dépannage
+------------
+
+- Si l'interface ne s'ouvre pas, vérifiez que le contrôleur est alimenté, que
+  l'appareil de navigation est sur le même réseau Wi-Fi et réessayez
+  http://midiserver.local/.
+- Si le contrôleur n'apparaît pas sur le réseau, connectez-vous au point
+  d'accès « Midi_Controller_AP_... » et vérifiez ou reconfigurez les identifiants
+  dans la page « Wifi ».
+- Si les tuiles s'affichent mais qu'aucun son n'est entendu, vérifiez que le
+  câble est branché au port USB-OTG et qu'un logiciel recevant le MIDI USB est
+  ouvert et configuré sur l'entrée MIDI du contrôleur.
+- Si les changements du Dashboard n'ont pas été conservés, retournez en mode
+  modification et cliquez sur « Enregistrer ». Le stockage du navigateur peut
+  être propre à chaque appareil ou profil de navigateur.

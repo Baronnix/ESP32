@@ -384,7 +384,7 @@ void loop() {
 
 1. Colle le code complet
 2. Modifie les variables avec le nom et le mot de asee de ton wifi
-3. Compile et téléverse ton programme complet en utilisant le port USB-CDC
+3. Compile et téléverse ton programme complet en utilisant le port USB-TTL
 4. Va dans : Outils → Moniteur Série
 5. Reset la carte ESP32-S3 Dev Module
 6. Lis les logs dans le Moniteur Série et récupère les adresses url:
