@@ -34,7 +34,7 @@ String wifiPASS = "";
 String notes[NUMBER_NOTES] = {"C-2", "CS-2", "D-2", "DS-2", "E-2", "F-2", "FS-2", "G-2", "GS-2", "A-2", "AS-2", "B-2", "C-1", "CS-1", "D-1", "DS-1", "E-1", "F-1", "FS-1", "G-1", "GS-1", "A-1", "AS-1", "B-1", "C-0", "CS-0", "D-0", "DS-0", "E-0", "F-0", "FS-0", "G-0", "GS-0", "A-0", "AS-0", "B-0", "C1", "CS1", "D1", "DS1", "E1", "F1", "FS1", "G1", "GS1", "A1", "AS1", "B1", "C2", "CS2", "D2", "DS2", "E2", "F2", "FS2", "G2", "GS2", "A2", "AS2", "B2", "C3", "CS3", "D3", "DS3", "E3", "F3", "FS3", "G3", "GS3", "A3", "AS3", "B3", "C4", "CS4", "D4", "DS4", "E4", "F4", "FS4", "G4", "GS4", "A4", "AS4", "B4", "C5", "CS5", "D5", "DS5", "E5", "F5", "FS5", "G5", "GS5", "A5", "AS5", "B5", "C6", "CS6", "D6", "DS6", "E6", "F6", "FS6", "G6", "GS6", "A6", "AS6", "B6", "C7", "CS7", "D7", "DS7", "E7", "F7", "FS7", "G7"};
 
 String prefix_ssid_ap = "Midi_Controller_AP_";
-const char* password_ap = "CROQUETTE";
+const char* password_ap = "BARONNIX";
 
 // ------------------------------------------------------------
 //                      LED RGB

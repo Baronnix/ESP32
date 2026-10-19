@@ -267,7 +267,7 @@ l'ESP32 crée un point d'accès Wi-Fi. Son nom commence par
 "Midi_Controller_AP_" (par exemple Midi_Controller_AP_1). Le mot de passe du
 point d'accès configuré dans le programme est :
 
-    CROQUETTE
+    BARONNIX
 
 Connectez votre ordinateur ou téléphone à ce point d'accès, puis ouvrez
 http://midiserver.local/ dans un navigateur. Si cette adresse n'est pas
