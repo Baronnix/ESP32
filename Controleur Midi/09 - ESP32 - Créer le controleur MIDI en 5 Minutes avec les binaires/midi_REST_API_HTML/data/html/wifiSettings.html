@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<script src="/js/bootstrap.bundle.min.js"></script>
+<script src="/js/functions.js"></script>
+
+<title>Wifi Settings</title>
+<div w3-include-html="/html/menu.html"></div> 
+</head>
+  
+<body>
+<br><br>
+
+<div class="container-fluid" style='text-align:center;max-width:320px'>
+Wifi Name:
+<br>
+<select class='btn btn-primary dropdown-toggle' style='background-color:grey;border-color:grey' name='wifiName' id='wifiName'>
+</select>
+<br><br>
+Wifi Password:
+<br>
+<input class='form-control' type='password' id='wifiPassword' placeholder='Enter wifi password'>
+<br><br>
+<button class='btn btn-primary btn-lg' style='width:250px;height:100px' id='registerWifi' onclick='registerToWifi()'>Enregistrer Wifi</button>
+<br><br>
+<button class='btn btn-danger btn-lg' id='forgetWifi' onclick='forgetWifi()'>Oublier Wifi</button>
+<br><br>
+<div class="alert alert-info" id="infoMsg" hidden role="alert"></div>
+<div class="alert alert-success" id="successMsg" hidden role="alert"></div>
+<div class="alert alert-warning" id="warningMsg" hidden role="alert"></div>
+<div class="alert alert-danger" id="errorMsg" hidden role="alert"></div></div>
+<script>
+includeHTML();
+populateWifiAvailable();
+</script>
+
+</body>
+</html>
