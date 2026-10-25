@@ -103,6 +103,55 @@ function registerToWifi(){
 	xmlHttp.send();	
 }
 
+function loadConfigMidi() {
+	document.getElementById('button-urlName').disabled = true;
+	var configResult = "midiserver";
+	var xmlHttp = null;
+	var theUrl = "/getConfig";
+	xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+        if (this.readyState == 4) {
+			if (this.status == 200) {
+				configResult = JSON.parse(this.responseText);
+				document.getElementById('urlName').value = configResult.url;
+				document.getElementById('urlAddr').textContent = configResult.fullUrl;
+				document.getElementById('ipAddr').textContent = configResult.ip;
+				document.getElementById('button-urlName').disabled = false;
+			}
+			else {
+				displayMsg("Erreur lors du traitement de la demande pour récupérer l'adresse url", "error");
+				document.getElementById('button-urlName').disabled = false;
+			}
+        }
+    }   
+	xmlHttp.open( "GET", theUrl );
+	xmlHttp.send();	
+}
+
+function registerUrl() {
+	document.getElementById('button-urlName').disabled = true;
+	var urlValue = document.getElementById('urlName').value;
+	var result;
+	var xmlHttp = null;
+	var theUrl = "/setUrl?url=" + urlValue;
+	xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+        if (this.readyState == 4) {
+			if (this.status == 200) {
+				result = this.responseText;
+				displayMsg(result, "info");
+				document.getElementById('button-urlName').disabled = false;
+			}
+			else {
+				displayMsg("Erreur lors du traitement de la demande", "error");
+				document.getElementById('button-urlName').disabled = false;
+			}
+        }
+    }   
+	xmlHttp.open( "GET", theUrl );
+	xmlHttp.send();	
+}
+
 function forgetWifi() {
 	var result;
 	var xmlHttp = null;
@@ -161,13 +210,18 @@ function playNote(note,channel) {
 	hideMsg();
 }
 
+function playNoteConfig(note) {
+	var channel = document.getElementById('inputGroupSelectChannel').value;
+	playNote(note, channel);
+}
+
 function buildNotesButtons() {
 	for (let octaveIndex in notes) {
 		for (let noteIndex in notes[octaveIndex]) {
 			newbutton = document.createElement("button");
 			newbutton.setAttribute("class", "btn btn-primary");
 			newbutton.setAttribute("id", "note_" + notes[octaveIndex][noteIndex]);
-			newbutton.setAttribute("onclick", "playNote('" + notes[octaveIndex][noteIndex] + "',1);");
+			newbutton.setAttribute("onclick", "playNoteConfig('" + notes[octaveIndex][noteIndex] + "');");
 			newbutton.innerHTML = notes[octaveIndex][noteIndex];
 			document.getElementById("notesDiv").append(newbutton);
 		}

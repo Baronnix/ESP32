@@ -14,9 +14,10 @@
 Adafruit_NeoPixel rgbLED(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 
 // --- EEPROM ---
-#define EEPROM_SIZE 200
+#define EEPROM_SIZE 300
 #define SSID_ADDR   0
 #define PASS_ADDR   100
+#define URL_ADDR    200
 
 #define NUMBER_NOTES 128
 
@@ -29,6 +30,8 @@ AsyncWebServer server(80);
 // --- Variables WiFi ---
 String wifiSSID = "";
 String wifiPASS = "";
+String url = "midiserver";
+String url_temp = "";
 
 // Notes are in the order of the Midi commmands: the index of the note in the aray is the midi note
 String notes[NUMBER_NOTES] = {"C-2", "CS-2", "D-2", "DS-2", "E-2", "F-2", "FS-2", "G-2", "GS-2", "A-2", "AS-2", "B-2", "C-1", "CS-1", "D-1", "DS-1", "E-1", "F-1", "FS-1", "G-1", "GS-1", "A-1", "AS-1", "B-1", "C-0", "CS-0", "D-0", "DS-0", "E-0", "F-0", "FS-0", "G-0", "GS-0", "A-0", "AS-0", "B-0", "C1", "CS1", "D1", "DS1", "E1", "F1", "FS1", "G1", "GS1", "A1", "AS1", "B1", "C2", "CS2", "D2", "DS2", "E2", "F2", "FS2", "G2", "GS2", "A2", "AS2", "B2", "C3", "CS3", "D3", "DS3", "E3", "F3", "FS3", "G3", "GS3", "A3", "AS3", "B3", "C4", "CS4", "D4", "DS4", "E4", "F4", "FS4", "G4", "GS4", "A4", "AS4", "B4", "C5", "CS5", "D5", "DS5", "E5", "F5", "FS5", "G5", "GS5", "A5", "AS5", "B5", "C6", "CS6", "D6", "DS6", "E6", "F6", "FS6", "G6", "GS6", "A6", "AS6", "B6", "C7", "CS7", "D7", "DS7", "E7", "F7", "FS7", "G7"};
@@ -153,6 +156,30 @@ String sendWifiAvailable() {
 }
 
 // ------------------------------------------------------------
+//                      Get IP
+// ------------------------------------------------------------
+String getLocalIP() {
+    WiFiMode_t mode = WiFi.getMode();
+
+    if (mode == WIFI_MODE_STA) {
+        return WiFi.localIP().toString();
+    }
+
+    if (mode == WIFI_MODE_AP) {
+        return WiFi.softAPIP().toString();
+    }
+
+    if (mode == WIFI_MODE_APSTA) {
+        if (WiFi.status() == WL_CONNECTED) {
+            return WiFi.localIP().toString();
+        }
+        return WiFi.softAPIP().toString();
+    }
+
+    return "0.0.0.0";
+}
+
+// ------------------------------------------------------------
 //                      Notes Methods
 // ------------------------------------------------------------
 void playNote(String note, int channel){
@@ -201,13 +228,23 @@ void setup() {
 
   wifiSSID = readEEPROM(SSID_ADDR, 100);
   wifiPASS = readEEPROM(PASS_ADDR, 100);
+  url_temp = readEEPROM(URL_ADDR, 100);
+  
+  bool hasUrl = url_temp.length() > 0;
+
+  if (!hasUrl) {
+    writeEEPROM(URL_ADDR, url, 100);
+  }
+  else {
+    url = url_temp;
+  }
 
   bool hasCredentials = wifiSSID.length() > 0 && wifiPASS.length() > 0;
 
   if (!hasCredentials) startAccessPoint();
   else if (!tryConnectWiFi()) startAccessPoint();
 
-  if (MDNS.begin("midiserver")) {
+  if (MDNS.begin(url)) {
     Serial.println("📛 mDNS actif : midiserver.local");
   }
 
@@ -231,7 +268,7 @@ void setup() {
 
   server.on("/setWifi", HTTP_GET, [](AsyncWebServerRequest *request){
     if (!request->hasParam("ssid") || !request->hasParam("password")) {
-      request->send(400, "text/plain", "Missing ssid or password");
+      request->send(400, "text/plain", "SSID ou mot de passe manquant.");
       return;
     }
 
@@ -242,6 +279,25 @@ void setup() {
     writeEEPROM(PASS_ADDR, newPASS, 100);
 
     request->send(200, "text/plain", "Wifi enregistre, pour vous connecter redemarrez l'appareil.");
+  });
+
+  server.on("/getConfig", HTTP_GET, [](AsyncWebServerRequest *request){
+    String response = "{\"ip\":\"" + getLocalIP() + "\",\"url\":\"" + url + "\",\"fullUrl\":\"http://" + url + ".local\"}";
+
+    request->send(200, "application/json", response);
+  });
+
+  server.on("/setUrl", HTTP_GET, [](AsyncWebServerRequest *request){
+    if (!request->hasParam("url")) {
+      request->send(400, "text/plain", "URL manquante.");
+      return;
+    }
+
+    String newURL = request->getParam("url")->value();
+
+    writeEEPROM(URL_ADDR, newURL, 100);
+
+    request->send(200, "text/plain", "URL enregistree, pour l'utiliser redemarrez l'appareil. Pense a utiliser l'ip si cela echoue.");
   });
 
   server.on("/actions/", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -272,8 +328,8 @@ void setup() {
   server.on("/html/menu.html", HTTP_GET, [](AsyncWebServerRequest *request){
       request->send(LittleFS, "/html/menu.html");
     });
-  server.on("/html/dashboard.html", HTTP_GET, [](AsyncWebServerRequest *request){
-      request->send(LittleFS, "/html/dashboard.html");
+  server.on("/html/midiSettings.html", HTTP_GET, [](AsyncWebServerRequest *request){
+      request->send(LittleFS, "/html/midiSettings.html");
     });
   server.on("/html/wifiSettings.html", HTTP_GET, [](AsyncWebServerRequest *request){
       request->send(LittleFS, "/html/wifiSettings.html");

@@ -3,34 +3,146 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/gridstack.min.css">
+<link rel="stylesheet" href="/css/globals.css">
 <script src="/js/bootstrap.bundle.min.js"></script>
-<script src="/js/functions.js"></script>
+<script src="/js/gridstack-all.min.js"></script>
+
 <title>Controleur Midi</title>
-<div id="menu"></div>
-<div w3-include-html="/html/menu.html"></div> 
+<div w3-include-html="/html/menu.html"></div>
 </head>
-  
+
+<style>
+.grid-stack-item .remove-item {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+}
+.grid-stack-item .edit-item {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+}
+.grid-stack-item .play-item {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+}
+</style>
+	
 <body>
 <br>
-<div class="container-fluid" style='text-align:center;max-width:800px'>
-<div style='text-align:center;width:800px'>
-	<h4><span class="badge bg-dark">Notes</span></h4>
-	<div id="notesDiv">
+<div class="container-fluid" style='text-align:center;'>
+	<div style='text-align:center;'>
+		<h4><span class="badge bg-dark">Dashboard Intuitif</span></h4>
+		<br>
 	</div>
+	
+	<div class="col-sm-12 col-md-10" style="padding-bottom: 25px;">
+          <div class="grid-container">
+            <div class="grid-stack" id="advanced-grid"></div>
+          </div>
+        </div>	
+	<button type="button" class="btn btn-primary" id="playButton" onclick="switchToPlay()">Jouer</button>
+	<button type="button" class="btn btn-primary" id="editButton" onclick="switchToEdit()">Editer</button>
+	<button type="button" class="btn btn-warning" id="saveButton" onclick="saveGrid()">Enregistrer</button>
+	<button type="button" class="btn btn-secondary" id="addButton" onclick="addNewWidget()">Ajouter Tuile</button>	
+	<button type="button" class="btn btn-danger" data-bs-toggle="modal" id="editConfButton" data-bs-target="#editConfigModal" onclick="openEditConfigModal()">Editer Configuration</button>
 	<br><br>
-	<button id="rebootButton" type='button' class='btn btn-primary' onclick='reboot()' data-toggle='tooltip' data-placement='top' title='Redemarrer'>Redemarrer</button>
-	<br><br>
-</div><br>
-<div style='text-align:center;width:800px'>
-<div class="alert alert-info" id="infoMsg" hidden role="alert"></div>
-<div class="alert alert-success" id="successMsg" hidden role="alert"></div>
-<div class="alert alert-warning" id="warningMsg" hidden role="alert"></div>
-<div class="alert alert-danger" id="errorMsg" hidden role="alert"></div>
-</div></div>
+	<div style='text-align:center;'>
+	<div class="alert alert-info" id="infoMsg" hidden role="alert"></div>
+	<div class="alert alert-success" id="successMsg" hidden role="alert"></div>
+	<div class="alert alert-warning" id="warningMsg" hidden role="alert"></div>
+	<div class="alert alert-danger" id="errorMsg" hidden role="alert"></div>
+	</div>
+</div>
+	<!-- Modal Edit Config-->
+	<div class="modal modal-xl fade" id="editConfigModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editConfigLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<h1 class="modal-title fs-5" id="editConfigLabel">Editer Configuration</h1>
+			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		  </div>
+		  <div class="modal-body">
+			<div id="alertEditConfigModal" class="alert alert-danger" role="alert" hidden></div>
+			<textarea id="configTextArea" class="form-control" aria-label="With textarea"></textarea>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+			<button type="button" class="btn btn-primary" onclick="saveConfigGridstack(document.getElementById('configTextArea').value)">Enregistrer</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<!-- Modal Edit Widget-->
+	<div class="modal modal-xl fade" id="editWidgetModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editWidgetLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<h1 class="modal-title fs-5" id="editWidgetLabel">Editer Tuile</h1>
+			<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		  </div>
+		  <div class="modal-body">
+			<div id="alertEditWidgetModal" class="alert alert-danger" role="alert" hidden></div>
+			<div class="input-group mb-3">
+			  <span class="input-group-text" id="idLabel">Identifiant</span>
+			  <input type="text" disabled id="idInput" class="form-control" aria-describedby="idLabel">
+			</div>
+			<div class="input-group mb-3">
+			  <span class="input-group-text" id="textLabel">Texte</span>
+			  <input type="text" id="textInput" class="form-control" aria-describedby="textLabel">
+			</div>
+			<div class="input-group mb-3">
+			  <label class="input-group-text" for="inputGroupSelectChannel">Channel</label>
+			  <select class="form-select" id="inputGroupSelectChannel">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="7">7</option>
+				<option value="8">8</option>
+			  </select>
+			</div>
+			<div class="input-group mb-3">
+			  <label class="input-group-text" for="inputGroupSelectNote">Note</label>
+			  <select class="form-select" id="inputGroupSelectNote">
+			  </select>
+			</div>
+			<div class="input-group mb-3">
+			  <span class="input-group-text" id="colorLabel">Couleur</span>
+			  <input type="color" id="colorInput" style="border-color:#dee2e6;background-color:white;" class="form-control-lg" aria-describedby="colorLabel">
+			</div>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+			<button type="button" class="btn btn-primary" onclick="applyWidgetConfig()">Appliquer</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+<script src="/js/functions-gridstack.js"></script>
+<script src="/js/functions.js"></script>
 <script>
 includeHTML();
-buildNotesButtons();
+loadItems();  
+loadPage();
 </script>
 
 </body>
+
 </html>

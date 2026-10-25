@@ -10,14 +10,18 @@ comme un appareil MIDI USB ; il ne produit pas de son à lui seul. Pour entendre
 les notes, utilisez un logiciel ou un instrument virtuel capable de recevoir le
 MIDI USB.
 
-L'interface de configuration se commande depuis un navigateur. Elle est
+Par défaut, l'interface de configuration se commande depuis un navigateur. Elle est
 accessible à l'adresse :
 
     http://midiserver.local/
 
 L'ordinateur ou le téléphone doit être connecté au même réseau Wi-Fi que le
 contrôleur. Selon le système utilisé, la résolution de l'adresse
-midiserver.local peut ne pas être prise en charge.
+midiserver.local peut ne pas être prise en charge et l'adresse IP devra être utilisée.
+
+Il est possible de changer l'adresse midiserver.local pour la personnaliser.
+Un redémarrage est nécessaire après l'enregistrement d'une nouvelle adresse pour 
+qu'elle soit prise en compte.
 
 2. Première connexion ou connexion au point d'accès
 ---------------------------------------------------
@@ -33,8 +37,16 @@ Connectez votre ordinateur ou téléphone à ce point d'accès, puis ouvrez
 http://midiserver.local/ dans un navigateur. Si cette adresse n'est pas
 résolue en mode point d'accès, essayez http://192.168.4.1/.
 
-3. Configurer le Wi-Fi
----------------------
+3. Code Couleur de la LED
+-------------------------
+
+L'état de connection Wi-Fi est indiqué par la couleur de la LED
+* Orange: Tentative de connection au réseau Wi-Fi enregistré
+* Bleu: Connection au point d'accès requise
+* Eteinte: Connecté au réseau Wi-Fi enregistré
+
+4. Configurer le Wi-Fi
+----------------------
 
 1. Dans le menu, ouvrez « Wifi ».
 2. Attendez que la liste des réseaux disponibles s'affiche.
@@ -52,18 +64,18 @@ Pour effacer les identifiants Wi-Fi, ouvrez « Wifi », cliquez sur « Oublier
 Wifi », puis redémarrez le contrôleur. Il créera alors son point d'accès de
 configuration.
 
-4. Jouer des notes
+5. Jouer des notes
 ------------------
 
-La page d'accueil présente les notes MIDI disponibles. Cliquez sur une note
-pour l'envoyer sur le canal MIDI 1.
+La page de configuration présente les notes MIDI disponibles. Cliquez sur une note
+pour l'envoyer sur le canal MIDI choisit.
 
-La page « Dashboard » propose des tuiles configurables. En mode jeu, cliquez sur
+La page « Home » propose des tuiles configurables. En mode jeu, cliquez sur
 une tuile pour envoyer la note et le canal associés. La note est transmise en
 MIDI USB à l'ordinateur ; le son dépend du logiciel ou de l'instrument virtuel
 utilisé sur celui-ci.
 
-5. Personnaliser le Dashboard
+6. Personnaliser le Dashboard
 ----------------------------
 
 Cliquez sur « Editer » pour passer en mode modification. Dans ce mode, vous
@@ -87,7 +99,7 @@ version, utilisez les commandes visuelles d'édition des tuiles pour modifier
 le Dashboard ; l'édition ou l'importation depuis cette fenêtre n'est pas prise
 en charge de manière fiable.
 
-6. Dépannage
+7. Dépannage
 ------------
 
 - Si l'interface ne s'ouvre pas, vérifiez que le contrôleur est alimenté, que

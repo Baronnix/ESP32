@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<script src="/js/bootstrap.bundle.min.js"></script>
+<script src="/js/functions.js"></script>
+<title>Controleur Midi</title>
+<div id="menu"></div>
+<div w3-include-html="/html/menu.html"></div> 
+</head>
+  
+<body>
+<br>
+<div class="container-fluid" style='text-align:center;max-width:800px'>
+<div style='text-align:center;width:800px'>
+	<h4><span class="badge bg-dark">Notes</span></h4>
+	<div class="input-group mb-3">
+	  <label class="input-group-text" for="inputGroupSelectChannel">Channel</label>
+	  <select class="form-select" id="inputGroupSelectChannel">
+		<option value="1">1</option>
+		<option value="2">2</option>
+		<option value="3">3</option>
+		<option value="4">4</option>
+		<option value="5">5</option>
+		<option value="6">6</option>
+		<option value="7">7</option>
+		<option value="8">8</option>
+	  </select>
+	</div>
+	<br>
+	<div id="notesDiv">
+	</div>
+	<br><br>
+	<br><br>
+	Nom Adresse Url:
+	<br>
+	<div class="input-group mb-3">
+		<input type="text" class="form-control" placeholder="Saisir l'adresse Url" aria-label="Recipient’s username" aria-describedby="button-urlName" id='urlName'>
+		<button class="btn btn-outline-secondary" type="button" id="button-urlName" onclick='registerUrl()'>Enregistrer</button>
+	</div>
+	<br>
+	Adresse Url: <span class="badge text-bg-primary" id="urlAddr"></span>
+	<br>
+	Adresse Ip: <span class="badge text-bg-primary" id="ipAddr"></span>
+	<br><br>
+	<button id="rebootButton" type='button' class='btn btn-primary' onclick='reboot()' data-toggle='tooltip' data-placement='top' title='Redemarrer'>Redemarrer</button>
+	<br><br>
+</div><br>
+<div style='text-align:center;width:800px'>
+<div class="alert alert-info" id="infoMsg" hidden role="alert"></div>
+<div class="alert alert-success" id="successMsg" hidden role="alert"></div>
+<div class="alert alert-warning" id="warningMsg" hidden role="alert"></div>
+<div class="alert alert-danger" id="errorMsg" hidden role="alert"></div>
+</div></div>
+<script>
+includeHTML();
+loadConfigMidi();
+buildNotesButtons();
+</script>
+
+</body>
+</html>
