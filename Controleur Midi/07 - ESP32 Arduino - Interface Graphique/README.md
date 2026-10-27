@@ -11,7 +11,7 @@ L'interface doit être conçue de manière à fonctionner :
 
 # 📺 Vidéo
 
-Lien Youtube: [https://www.youtube.com/@Baronnix/playlists](https://www.youtube.com/@Baronnix/playlists)
+Lien Youtube: [https://www.youtube.com/watch?v=lCPO282ZkmM](https://www.youtube.com/watch?v=lCPO282ZkmM)
 
 # 📦 Prérequis
 

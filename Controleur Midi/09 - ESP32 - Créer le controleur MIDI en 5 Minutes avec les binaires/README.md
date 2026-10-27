@@ -6,7 +6,7 @@ Dans ce tutoriel, nous allons apprendre à créer un contrôleur MIDI basé sur 
 
 # 📺 Vidéo
 
-Lien Youtube: [https://www.youtube.com/@Baronnix/playlists](https://www.youtube.com/@Baronnix/playlists)
+Lien Youtube: [https://www.youtube.com/watch?v=4ILaIuZSrds](https://www.youtube.com/watch?v=4ILaIuZSrds)
 
 # 📦 Prérequis
 

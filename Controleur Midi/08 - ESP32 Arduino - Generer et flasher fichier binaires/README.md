@@ -15,7 +15,7 @@ Dans ce tutoriel, nous allons apprendre à générer tous les fichiers binaires 
 
 # 📺 Vidéo
 
-Lien Youtube: [https://www.youtube.com/@Baronnix/playlists](https://www.youtube.com/@Baronnix/playlists)
+Lien Youtube: [https://www.youtube.com/watch?v=uCcn7Q-u1ig](https://www.youtube.com/watch?v=uCcn7Q-u1ig)
 
 # 📦 Prérequis
 
