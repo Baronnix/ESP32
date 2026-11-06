@@ -75,6 +75,12 @@ Le firmware gère deux modes :
 
 ![cablage](images/cablage.png)
 
+## 3.2 Dependances et Versions
+
+* Arduino IDE - 2.3.10
+* Cartes:
+  * esp32 par Espressif Systems - 3.3.11
+
 ## 4. Préparation d'Arduino IDE
 
 ### 4.1 Installer le support ESP32
