@@ -112,128 +112,191 @@ Dans le menu **Tools** :
 Créer un nouveau sketch, par exemple `esp32_h2_button_zigbee.ino`, puis copier le code suivant :
 
 ```cpp
+
 #include <Arduino.h>
 #include "Zigbee.h"
 
-// Endpoint Zigbee du capteur binaire.
+// --------------------------------------------------
+// CONFIGURATION
+// --------------------------------------------------
+
 #define SENSOR_ENDPOINT 10
 
-// Durée d'appui permettant un factory reset Zigbee.
-static const uint32_t FACTORY_RESET_PRESS_MS = 5000;
+#define EXTERNAL_BUTTON_PIN 14
+#define FACTORY_RESET_PIN 9
 
-// Sur l’ESP32-H2 SuperMini, le bouton BOOT est généralement relié à GPIO9.
-static const uint8_t BOOT_BUTTON_PIN = 9;
-static const uint8_t EXTERNAL_BUTTON_PIN = 14;
-static const uint32_t DEBOUNCE_MS = 50;
-static const uint32_t REPORT_RETRY_MS = 1000;
+const uint32_t DEBOUNCE_MS = 50;
+const uint32_t FACTORY_RESET_HOLD_MS = 5000;
+
+// --------------------------------------------------
+// ZIGBEE BINARY INPUT
+// --------------------------------------------------
 
 ZigbeeBinary buttonSensor(SENSOR_ENDPOINT);
 
-uint32_t bootButtonPressedAt = 0;
-uint32_t lastDebounceTime = 0;
-uint32_t lastReportAttempt = 0;
+// --------------------------------------------------
+// VARIABLES BOUTON GPIO14
+// --------------------------------------------------
+
 bool lastRawButtonState = false;
 bool stableButtonState = false;
-bool reportPending = true;
-bool resetTriggered = false;
+uint32_t lastDebounceTime = 0;
 
-void handleFactoryResetButton() {
-  if (digitalRead(BOOT_BUTTON_PIN) == LOW) {
-    if (bootButtonPressedAt == 0) {
-      bootButtonPressedAt = millis();
-      resetTriggered = false;
-    }
+// --------------------------------------------------
+// VARIABLES FACTORY RESET GPIO9
+// --------------------------------------------------
 
-    if (!resetTriggered &&
-        millis() - bootButtonPressedAt >= FACTORY_RESET_PRESS_MS) {
-      resetTriggered = true;
-      Serial.println("Réinitialisation Zigbee et redémarrage...");
-      delay(200);
-      Zigbee.factoryReset();
-    }
-  } else {
-    bootButtonPressedAt = 0;
-    resetTriggered = false;
-  }
+uint32_t bootButtonPressTime = 0;
+bool factoryResetTriggered = false;
+
+// --------------------------------------------------
+// SETUP
+// --------------------------------------------------
+
+void setup() {
+
+  Serial.begin(115200);
+  delay(2000);
+
+  Serial.println();
+  Serial.println("Demarrage ESP32-H2 Zigbee");
+
+  // Initialisation des boutons
+  pinMode(EXTERNAL_BUTTON_PIN, INPUT_PULLUP);
+  pinMode(FACTORY_RESET_PIN, INPUT_PULLUP);
+
+  // Initialisation de l'etat du bouton GPIO14
+  lastRawButtonState = digitalRead(EXTERNAL_BUTTON_PIN) == LOW;
+  stableButtonState = lastRawButtonState;
+
+  // Configuration du capteur Zigbee
+  buttonSensor.setManufacturerAndModel(
+    "DIY",
+    "ESP32-H2-GPIO14-Button"
+  );
+
+  buttonSensor.addBinaryInput();
+
+  buttonSensor.setBinaryInputApplication(
+    BINARY_INPUT_APPLICATION_TYPE_HVAC_OTHER
+  );
+
+  buttonSensor.setBinaryInputDescription("Bouton GPIO14");
+
+  buttonSensor.setBinaryInput(stableButtonState);
+
+  // Ajout de l'endpoint
+  Zigbee.addEndpoint(&buttonSensor);
+
+  // Configuration Zigbee
+  Zigbee.setDebugMode(true);
+  Zigbee.setPrimaryChannelMask(1UL << 11);
+
+  // Demarrage Zigbee
+  Zigbee.begin();
+
+  Serial.println("Initialisation Zigbee terminee");
 }
 
-void handleExternalButton() {
-  const bool rawButtonState = digitalRead(EXTERNAL_BUTTON_PIN) == LOW;
+// --------------------------------------------------
+// LOOP
+// --------------------------------------------------
+
+void loop() {
+
+  // ================================================
+  // 1. BOUTON BOOT GPIO9 : FACTORY RESET
+  // ================================================
+
+  bool bootButtonPressed = (digitalRead(FACTORY_RESET_PIN) == LOW);
+
+  if (bootButtonPressed && !factoryResetTriggered) {
+
+    // Premier appui
+    if (bootButtonPressTime == 0) {
+      bootButtonPressTime = millis();
+      Serial.println("Bouton BOOT : appui detecte");
+    }
+
+    // Maintien pendant 5 secondes
+    if (millis() - bootButtonPressTime >= FACTORY_RESET_HOLD_MS) {
+
+      factoryResetTriggered = true;
+
+      Serial.println();
+      Serial.println("FACTORY RESET ZIGBEE !");
+      Serial.println("Effacement du reseau et redemarrage...");
+
+      delay(500);
+
+      // Efface les parametres Zigbee et redemarre
+      Zigbee.factoryReset(true);
+
+      // Securite si la fonction ne redemarre pas
+      while (true) {
+        delay(1000);
+      }
+    }
+
+  } else if (!bootButtonPressed) {
+
+    // Relachement du bouton BOOT
+    bootButtonPressTime = 0;
+  }
+
+  // ================================================
+  // 2. BOUTON EXTERNE GPIO14 : BINARY INPUT
+  // ================================================
+
+  bool rawButtonState = digitalRead(EXTERNAL_BUTTON_PIN) == LOW;
+
+  // Detection changement brut
   if (rawButtonState != lastRawButtonState) {
+
     lastRawButtonState = rawButtonState;
     lastDebounceTime = millis();
   }
 
+  // Anti-rebond
   if (millis() - lastDebounceTime >= DEBOUNCE_MS &&
       rawButtonState != stableButtonState) {
+
     stableButtonState = rawButtonState;
-    reportPending = true;
-    Serial.printf("Bouton GPIO14 : %s\n", stableButtonState ? "appuyé" : "relâché");
-  }
-}
 
-void setup() {
-  Serial.begin(115200);
-  delay(1500);
+    // Mise a jour du cluster
+    buttonSensor.setBinaryInput(stableButtonState);
 
-  pinMode(BOOT_BUTTON_PIN, INPUT_PULLUP);
-  pinMode(EXTERNAL_BUTTON_PIN, INPUT_PULLUP);
+    Serial.printf(
+      "Bouton GPIO14 : %s\n",
+      stableButtonState ? "APPUYE" : "RELACHE"
+    );
 
-  lastRawButtonState = digitalRead(EXTERNAL_BUTTON_PIN) == LOW;
-  stableButtonState = lastRawButtonState;
+    // Publication Zigbee
+    bool result = buttonSensor.reportBinaryInput();
 
-  // Configuration de l'endpoint avant son ajout à la pile Zigbee.
-  buttonSensor.setManufacturerAndModel("DIY", "ESP32-H2-GPIO14-Button");
-  if (!buttonSensor.addBinaryInput() ||
-      !buttonSensor.setBinaryInputApplication(BINARY_INPUT_APPLICATION_TYPE_HVAC_OTHER) ||
-      !buttonSensor.setBinaryInputDescription("Bouton GPIO14") ||
-      !buttonSensor.setBinaryInput(stableButtonState)) {
-    Serial.println("Erreur : impossible de configurer l'entrée binaire Zigbee.");
-    ESP.restart();
+    Serial.printf(
+      "Publication Zigbee : %s\n",
+      result ? "OK" : "ECHEC"
+    );
   }
 
-  Zigbee.addEndpoint(&buttonSensor);
+  // ================================================
+  // 3. SURVEILLANCE CONNEXION ZIGBEE
+  // ================================================
 
-  Serial.println("Démarrage du composant Zigbee...");
-  Serial.println("Si le composant n'est pas encore associé, activez Permit join dans Zigbee2MQTT.");
+  static uint32_t lastLog = 0;
 
-  if (!Zigbee.begin()) {
-    Serial.println("Erreur : impossible de démarrer la pile Zigbee.");
-    delay(1000);
-    ESP.restart();
+  if (millis() - lastLog >= 2000) {
+
+    lastLog = millis();
+
+    Serial.printf(
+      "Zigbee connected : %d\n",
+      Zigbee.connected()
+    );
   }
 
-  Serial.println("Pile Zigbee démarrée.");
-}
-
-void loop() {
-  handleFactoryResetButton();
-  handleExternalButton();
-
-  if (!Zigbee.connected()) {
-    // Mode 1 : appairage ou reconnexion au réseau Zigbee.
-    static uint32_t lastPairingMessage = 0;
-    if (millis() - lastPairingMessage >= 5000) {
-      lastPairingMessage = millis();
-      Serial.println("Mode appairage : attente de connexion au réseau Zigbee...");
-    }
-    delay(20);
-    return;
-  }
-
-  // Publie aussi l'état initial et réessaie si le rapport Zigbee échoue.
-  if (reportPending && millis() - lastReportAttempt >= REPORT_RETRY_MS) {
-    lastReportAttempt = millis();
-    if (buttonSensor.setBinaryInput(stableButtonState) &&
-        buttonSensor.reportBinaryInput()) {
-      Serial.printf("État du bouton envoyé : %s\n", stableButtonState ? "appuyé" : "relâché");
-      reportPending = false;
-    } else {
-      Serial.println("Erreur : échec de l'envoi du rapport Zigbee, nouvel essai prévu.");
-    }
-  }
-
-  delay(20);
+  delay(10);
 }
 ```
 
