@@ -79,7 +79,7 @@ Le firmware gère deux modes :
 
 * Arduino IDE - 2.3.10
 * Cartes:
-  * esp32 par Espressif Systems - 3.3.11
+  * esp32 par Espressif Systems - 3.3.12
 
 ## 4. Préparation d'Arduino IDE
 
