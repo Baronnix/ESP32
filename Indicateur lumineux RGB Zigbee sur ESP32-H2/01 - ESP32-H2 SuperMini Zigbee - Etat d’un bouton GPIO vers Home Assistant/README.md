@@ -55,9 +55,11 @@ Le firmware gère deux modes :
 ![bouton_poussoir](../images/bouton_poussoir.jpg)
 
 - Un câble USB adapté à la carte
-- Home Assistant avec une passerelle Zigbee  (Voir tutoriel [04 - Zigbee Installation et Utilisation](https://www.youtube.com/watch?v=F-s3jXZxmUI))
+- Home Assistant avec une passerelle Zigbee
+  Voir tutoriels:
+    * [02 - Installation Home Assistant](https://www.youtube.com/watch?v=F-s3jXZxmUI)
+    * [04 - Zigbee Installation et Utilisation](https://www.youtube.com/watch?v=F-s3jXZxmUI))
 - Accès à l’interface Home Assistant 
-- Une passerelle Zigbee configurée avec Home Assistant (Zigbee2MQTT) (Voir tutoriel [02 - Installation Home Assistant](https://www.youtube.com/watch?v=F-s3jXZxmUI))
 - Arduino IDE 2.x avec le core Espressif ESP32 (Voir tutoriel [01 - ESP32 Arduino - USB‑C MIDI Controleur - Premiere Programmation](https://www.youtube.com/watch?v=1if2j6FiMQ4))
 
 ## 3.1 Broches utiles et cablage de l’ESP32-H2 SuperMini
