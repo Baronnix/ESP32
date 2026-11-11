@@ -96,13 +96,13 @@ Avec ce câblage, `HIGH` allume la LED et `LOW` l’éteint. Ne raccordez pas un
 
 ### 4.1 Installer le support ESP32
 
-Dans **Arduino IDE > File > Preferences**, ajouter cette URL dans **Additional Boards Manager URLs** :
+Dans **Arduino IDE > Fichier > Préférences**, ajouter cette URL dans **Additional Boards Manager URLs** :
 
 ```text
 https://espressif.github.io/arduino-esp32/package_esp32_index.json
 ```
 
-Puis ouvrir **Tools > Board > Boards Manager**, rechercher `esp32` et installer **esp32 by Espressif Systems**.
+Puis ouvrir **Outils > Carte > Gestionnaire de cartes**, rechercher `esp32` et installer **esp32 by Espressif Systems**.
 
 ### 4.2 Sélectionner les options Zigbee
 
