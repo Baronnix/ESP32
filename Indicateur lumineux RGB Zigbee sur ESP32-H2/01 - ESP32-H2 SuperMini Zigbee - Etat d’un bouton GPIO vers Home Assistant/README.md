@@ -55,8 +55,7 @@ Le firmware gère deux modes :
 ![bouton_poussoir](../images/bouton_poussoir.jpg)
 
 - Un câble USB adapté à la carte
-- Home Assistant avec une passerelle Zigbee
-  Voir tutoriels:
+- Home Assistant avec une passerelle Zigbee. Voir tutoriels:
     * [02 - Installation Home Assistant](https://www.youtube.com/watch?v=F-s3jXZxmUI)
     * [04 - Zigbee Installation et Utilisation](https://www.youtube.com/watch?v=F-s3jXZxmUI))
 - Accès à l’interface Home Assistant 
@@ -67,7 +66,6 @@ Le firmware gère deux modes :
 | Fonction | Broche | Remarque |
 |---|---:|---|
 | Bouton BOOT | GPIO9 | Actif à l’état bas, également broche de strapping |
-| LED intégrée | GPIO13 sur de nombreuses variantes | Inutile dans ce tutoriel |
 | USB-C natif | USB Serial/JTAG | Utilisé pour le flash et le moniteur série |
 | Bouton externe | GPIO14 | Câbler le bouton entre GPIO14 et GND |
 
