@@ -77,7 +77,7 @@ Tutoriels utiles :
 ### 3.1 Broches utiles et câblage de l’ESP32-H2 SuperMini
 
 | Fonction | Broche | Remarque |
-|---|---:|---|
+|---|---|---|
 | Bouton BOOT | GPIO9 | Actif à l’état bas, utilisé pour le Factory Reset |
 | LED externe | GPIO12 | Sortie commandée par Home Assistant |
 | USB-C natif | USB Serial/JTAG | Programmation et moniteur série |
