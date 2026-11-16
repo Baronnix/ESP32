@@ -666,55 +666,51 @@ Il est possible de modifier ces deux valeurs directement dans l'automatisation.
 Dans Home Assistant, créez une nouvelle automatisation et passez en mode YAML.
 
 ``` yaml
-
 alias: Variateur Zigbee - Fader ESP32-H2
 description: Variateur avec seuils minimum et maximum réglables
 mode: restart
 
 triggers:
   - trigger: state
-    entity_id: sensor.esp32_h2_fader
+    entity_id: sensor.fader_lampe_position_du_fader
 
 conditions: []
 
 actions:
   - variables:
-      # Seuils du fader (en %)
-      fader_min: 15
-      fader_max: 80
+      # Seuils réglables du fader
+      fader_min: 10
+      fader_max: 90
 
-      # Valeur actuelle du fader
-      fader: >
-        {{ states('sensor.esp32_h2_fader') | float(0) }}
+      # Position actuelle du fader
+      fader: "{{ states('sensor.fader_lampe_position_du_fader') | float(0) }}"
 
       # Calcul de la luminosité
       niveau: >
-        {% set valeur = states('sensor.esp32_h2_fader') | float(0) %}
-        {% set minimum = 15 %}
-        {% set maximum = 80 %}
-        {% if valeur <= minimum %}
+        {% if fader | float <= fader_min | float %}
           0
-        {% elif valeur >= maximum %}
+        {% elif fader | float >= fader_max | float %}
           100
         {% else %}
-          {{ ((valeur - minimum) * 100 / (maximum - minimum)) | round(0) | int }}
+          {{ ((fader | float - fader_min | float) * 100 /
+              (fader_max | float - fader_min | float)) | round(0) | int }}
         {% endif %}
 
   - choose:
-      # Fader inférieur ou égal au seuil minimum
+      # Extinction sous le seuil minimum
       - conditions:
           - condition: template
             value_template: "{{ niveau | int == 0 }}"
         sequence:
           - action: light.turn_off
             target:
-              entity_id: light.ma_lampe_zigbee
+              entity_id: light.lampe_buzzer
 
-    # Entre les deux seuils : variation linéaire
+    # Variation linéaire entre les deux seuils
     default:
       - action: light.turn_on
         target:
-          entity_id: light.ma_lampe_zigbee
+          entity_id: light.lampe_buzzer
         data:
           brightness_pct: "{{ niveau | int }}"
           transition: 0.1
