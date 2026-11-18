@@ -290,6 +290,8 @@ Pour chaque voie, le programme sélectionne la sortie, configure `SIG` en PWM et
 
 **Limite importante :** le PWM n'est transmis que sur la voie sélectionnée. Les quatre LED ne reçoivent donc pas quatre signaux PWM indépendants et continus en même temps. Pour un résultat robuste, un driver PWM externe ou un circuit de mémorisation adapté est recommandé.
 
+![PWM](images/Infographie%20PWM%20_%20piloter%20avec%20précision.png)
+
 ### Découplage de l'alimentation
 
 Placer un condensateur céramique de 100 nF entre VCC et GND, au plus près du module si possible.
