@@ -273,7 +273,7 @@ Chaque LED doit être montée en série avec une résistance de limitation de co
 
 Dans ce montage, le programme sélectionne une voie de sortie, place `SIG` en sortie et applique HIGH ou LOW. Il passe ensuite à la voie suivante.
 
-**Attention :** une sortie non sélectionnée n'est plus activement pilotée par l'ESP32. Pour obtenir quatre états stables et indépendants, un circuit de mémorisation ou un driver de sorties est préférable. Le CD74HC4067 seul ne conserve pas quatre niveaux de sortie indépendants.
+**Attention :** une sortie non sélectionnée n'est plus activement pilotée par l'ESP32. Pour obtenir quatre états stables et indépendants, un circuit de mémorisation ou un driver de sorties est préférable. Le CD74HC4067 seul ne conserve pas quatre niveaux de sortie indépendants. L'ajout d'un 74HC595 est nécessaire pour conserver les états en sortie.
 
 ### Connexion des quatre sorties à luminosité variable
 
