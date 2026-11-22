@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Les principes du projet</title>
+<style>
+  :root {
+    --bg: #101827;
+    --panel: #172438;
+    --text: #f4f7fb;
+    --muted: #a9b8cc;
+    --accent: #57d6c5;
+    --line: rgba(255,255,255,.12);
+  }
+  * { box-sizing: border-box; }
+  html, body { width:100%; height:100%; margin:0; }
+  body {
+    display:grid; place-items:center; overflow:hidden;
+    background:
+      radial-gradient(ellipse at 15% 15%, rgba(55,118,157,.24), transparent 42%),
+      radial-gradient(ellipse at 90% 85%, rgba(35,170,151,.15), transparent 38%),
+      var(--bg);
+    color:var(--text);
+    font-family: Inter, "Segoe UI", Arial, sans-serif;
+  }
+  .slide {
+    width:min(94vw, 160vh);
+    aspect-ratio:16/9;
+    max-height:92vh;
+    padding:6.2% 7.2%;
+    position:relative;
+    display:flex; flex-direction:column;
+    background:linear-gradient(145deg, rgba(25,42,64,.97), rgba(17,29,46,.97));
+    border:1px solid rgba(255,255,255,.13);
+    border-radius:22px;
+    box-shadow:0 28px 90px rgba(0,0,0,.42);
+  }
+  .eyebrow {
+    color:var(--accent); font-size:clamp(11px,1.15vw,18px);
+    font-weight:800; letter-spacing:.19em; text-transform:uppercase;
+    margin-bottom:1.5%;
+  }
+  h1 {
+    margin:0 0 4.3%; font-size:clamp(28px,3.5vw,54px);
+    line-height:1.08; letter-spacing:-.035em; font-weight:800;
+  }
+  .items { display:flex; flex-direction:column; gap:1.35%; flex:1; min-height:0; }
+  .item {
+    display:grid; grid-template-columns:clamp(34px,4vw,58px) 1fr;
+    align-items:start; gap:1.7%;
+    padding:1.05% 1.4%;
+    border:1px solid var(--line); border-radius:12px;
+    background:rgba(255,255,255,.035);
+    opacity:0; transform:translateY(12px);
+    transition:opacity .32s ease, transform .32s ease, background .32s ease;
+  }
+  .item.visible { opacity:1; transform:translateY(0); background:rgba(255,255,255,.065); }
+  .number {
+    width:clamp(30px,3.3vw,46px); height:clamp(30px,3.3vw,46px);
+    display:grid; place-items:center; border-radius:10px;
+    color:var(--accent); background:rgba(87,214,197,.12);
+    font-weight:800; font-size:clamp(13px,1.35vw,20px);
+  }
+  .copy { font-size:clamp(15px,1.72vw,26px); line-height:1.32; color:#dce5f0; }
+  .copy strong { color:#fff; font-weight:800; }
+  .footer {
+    display:flex; align-items:center; gap:16px; margin-top:2.4%;
+    color:var(--muted); font-size:clamp(10px,.95vw,14px);
+  }
+  .track { height:4px; flex:1; border-radius:9px; background:rgba(255,255,255,.12); overflow:hidden; }
+  .fill { height:100%; width:0%; background:var(--accent); transition:width .25s ease; }
+  .hint { white-space:nowrap; }
+  .complete { color:var(--accent); font-weight:700; }
+  @media (max-width:700px) {
+    .slide { width:96vw; padding:5%; border-radius:14px; }
+    h1 { margin-bottom:3%; }
+    .items { gap:1%; }
+    .item { padding:1% 1.2%; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition:none !important; } }
+</style>
+</head>
+<body>
+<main class="slide" aria-label="Slide interactive">
+  <div class="eyebrow">Les fondamentaux</div>
+  <h1>Les principes du projet</h1>
+  <section class="items" id="items">
+    <div class="item"><div class="number">01</div><div class="copy"><strong>DIY :</strong> concevoir et fabriquer soi-même les différents éléments.</div></div>
+    <div class="item"><div class="number">02</div><div class="copy"><strong>Modularité :</strong> pouvoir assembler et remplacer les modules.</div></div>
+    <div class="item"><div class="number">03</div><div class="copy"><strong>Évolutivité :</strong> ajouter facilement de nouvelles fonctionnalités.</div></div>
+    <div class="item"><div class="number">04</div><div class="copy"><strong>Accessibilité :</strong> privilégier des composants abordables et disponibles.</div></div>
+    <div class="item"><div class="number">05</div><div class="copy"><strong>Réparabilité :</strong> pouvoir remplacer les éléments indépendamment.</div></div>
+    <div class="item"><div class="number">06</div><div class="copy"><strong>Partage :</strong> documenter les différentes étapes pour permettre à chacun de reproduire le projet.</div></div>
+  </section>
+  <div class="footer">
+    <span id="counter">0 / 6</span>
+    <div class="track"><div class="fill" id="fill"></div></div>
+    <span class="hint" id="hint">Clic ou Espace pour révéler</span>
+  </div>
+</main>
+<script>
+(() => {
+  const items = [...document.querySelectorAll('.item')];
+  const counter = document.getElementById('counter');
+  const fill = document.getElementById('fill');
+  const hint = document.getElementById('hint');
+  let shown = 0;
+
+  function update() {
+    items.forEach((item, i) => item.classList.toggle('visible', i < shown));
+    counter.textContent = `${shown} / ${items.length}`;
+    fill.style.width = `${shown / items.length * 100}%`;
+    hint.textContent = shown === items.length ? 'Terminé · clic pour recommencer' : 'Clic ou Espace pour révéler';
+    hint.classList.toggle('complete', shown === items.length);
+  }
+  function next() {
+    shown = shown < items.length ? shown + 1 : 0;
+    update();
+  }
+  function previous() {
+    shown = Math.max(0, shown - 1);
+    update();
+  }
+  document.addEventListener('click', next);
+  document.addEventListener('keydown', e => {
+    if (['Space', 'ArrowRight', 'Enter'].includes(e.code)) {
+      e.preventDefault(); next();
+    } else if (['Backspace', 'ArrowLeft'].includes(e.code)) {
+      e.preventDefault(); previous();
+    } else if (e.code === 'Home') {
+      shown = 0; update();
+    }
+  });
+  update();
+})();
+</script>
+</body>
+</html>
