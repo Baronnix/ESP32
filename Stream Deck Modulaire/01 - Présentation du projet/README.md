@@ -2,6 +2,14 @@
 
 > Un contrôleur personnalisable, évolutif et connecté, entièrement conçu et fabriqué en DIY avec des modules interchangeables, des boîtiers imprimés en 3D et une intégration à Home Assistant et au contrôleur MIDI.
 
+# 📺 Vidéo
+
+Lien Youtube: [https://www.youtube.com/@Baronnix/playlists](https://www.youtube.com/@Baronnix/playlists)
+
+# Résumé visuel
+
+![overview](images/overview.png)
+
 ## 1. Présentation du projet
 
 L'objectif est de concevoir un **Stream Deck modulaire DIY**, constitué de plusieurs modules indépendants que l'on peut assembler et combiner selon ses besoins.
