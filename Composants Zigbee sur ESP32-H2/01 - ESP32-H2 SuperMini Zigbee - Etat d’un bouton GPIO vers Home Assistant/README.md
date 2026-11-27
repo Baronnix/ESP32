@@ -8,7 +8,7 @@ Ce tutoriel montre comment créer un composant Zigbee avec un **ESP32-H2 SuperMi
 
 # 📺 Vidéo
 
-Lien Youtube: [https://www.youtube.com/@Baronnix](https://www.youtube.com/@Baronnix)
+Lien Youtube: [https://www.youtube.com/watch?v=BdaKx9U1PPw](https://www.youtube.com/watch?v=BdaKx9U1PPw)
 
 ## 1. Architecture
 

@@ -9,7 +9,7 @@ Contrairement au tutoriel précédent, l’ESP32-H2 n’envoie plus l’état d�
 
 # 📺 Vidéo
 
-Lien YouTube : [https://www.youtube.com/@Baronnix](https://www.youtube.com/@Baronnix)
+Lien YouTube : [hhttps://www.youtube.com/watch?v=rqfhmMkmQRk](https://www.youtube.com/watch?v=rqfhmMkmQRk)
 
 ## 1. Architecture
 
